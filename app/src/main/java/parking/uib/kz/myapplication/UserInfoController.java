@@ -1,9 +1,12 @@
 package parking.uib.kz.myapplication;
 
 import okhttp3.ResponseBody;
+import parking.uib.kz.myapplication.model.GetUserInfoRequest;
 import parking.uib.kz.myapplication.model.User;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -12,7 +15,6 @@ import retrofit2.http.Path;
 
 public interface UserInfoController {
 
-    @GET("/user/getUserInfo/{phoneNumber}/{token}")
-    public Call<ResponseBody> getUserInfo(@Path("phoneNumber") String phoneNumber,
-                                          @Path("token") String token);
+    @POST("/getUserInfo")
+    public Call<ResponseBody> getUserInfo(@Body GetUserInfoRequest body);
 }

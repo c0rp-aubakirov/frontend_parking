@@ -7,11 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
+import parking.uib.kz.myapplication.model.GetUserInfoRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.button)
     Button loginButton;
+
+    Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +54,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendRequest() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.43.23:8090")
+                .baseUrl("http://192.168.43.23:8091")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         UserInfoController userInfoController = retrofit.create(UserInfoController.class);
 
-        Call<ResponseBody> login1 = userInfoController.getUserInfo("Login1", "1234");
+
+        GetUserInfoRequest src =
+                new GetUserInfoRequest("7772200051", "a2476cdd-73f1-41df-ab79-9d61ecde08b1");
+        String body = gson.toJson(
+                src);
+
+        Log.d(TAG, body);
+        Call<ResponseBody> login1 = userInfoController
+                .getUserInfo(src);
 
         login1.enqueue(callback);
     }
@@ -66,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 Log.d(TAG, response.body().string());
+                //TODO get User.class from body
             } catch (IOException e) {
                 e.printStackTrace();
             }
